@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Squircle background: charcoal at the top to black at the bottom. -->
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a3a3a"/>
+      <stop offset="0.5" stop-color="#1a1a1a"/>
+      <stop offset="1" stop-color="#000000"/>
+    </linearGradient>
+    <radialGradient id="bgGlow" cx="0.3" cy="0.1" r="0.8">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.5"/>
+      <stop offset="0.35" stop-color="#ffffff" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.16"/>
+    </linearGradient>
+
+    <!-- Bookmark glass: white at the top fading to silver. -->
+    <linearGradient id="ribbonFill" gradientUnits="userSpaceOnUse" x1="0" y1="128" x2="0" y2="384">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#e6e6e6"/>
+      <stop offset="1" stop-color="#8f8f8f"/>
+    </linearGradient>
+    <!-- Link glass: bright on the leading edge, grey on the trailing one. -->
+    <linearGradient id="linkFill" gradientUnits="userSpaceOnUse" x1="300" y1="296" x2="428" y2="380">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.5" stop-color="#c8c8c8"/>
+      <stop offset="1" stop-color="#7a7a7a"/>
+    </linearGradient>
+
+    <linearGradient id="sheen" gradientUnits="userSpaceOnUse" x1="100" y1="120" x2="300" y2="330">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.7"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+
+    <clipPath id="squircle">
+      <rect x="16" y="16" width="480" height="480" rx="116"/>
+    </clipPath>
+
+    <!-- The bookmark ribbon (the "Book"), with its notched tail. -->
+    <path id="ribbon" d="M164 128 H272 Q284 128 284 140 V384 L218 336 L152 384 V140 Q152 128 164 128 Z"/>
+    <!-- A chain link (the "Link"), sitting where the terminal mark's underscore was. -->
+    <path id="link" fill-rule="evenodd" d="M342 296 H386 A42 42 0 0 1 386 380 H342 A42 42 0 0 1 342 296 Z M340 320 A18 18 0 0 0 340 356 H388 A18 18 0 0 0 388 320 Z"/>
+    <!-- Masks include the stroke (clip paths would not), so the glass follows the real edge. -->
+    <mask id="ribbonMask" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <use href="#ribbon" fill="#fff" stroke="#fff" stroke-width="24" stroke-linejoin="round"/>
+    </mask>
+    <mask id="ribbonRim" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <use href="#ribbon" fill="#fff" stroke="#fff" stroke-width="24" stroke-linejoin="round"/>
+      <use href="#ribbon" fill="#000" stroke="#000" stroke-width="15" stroke-linejoin="round"/>
+    </mask>
+    <mask id="linkMask" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <use href="#link" fill="#fff"/>
+    </mask>
+  </defs>
+
+  <!-- Background -->
+  <rect x="16" y="16" width="480" height="480" rx="116" fill="url(#bg)"/>
+  <g clip-path="url(#squircle)">
+    <rect x="0" y="0" width="512" height="512" fill="url(#bgGlow)"/>
+    <!-- Faint construction wireframe -->
+    <g fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="2">
+      <path d="M58 118 H454 L256 474 Z"/>
+      <path d="M0 176 H512 M0 336 H512 M176 0 V512 M336 0 V512"/>
+      <circle cx="256" cy="256" r="150"/>
+      <path d="M16 16 L496 496 M496 16 L16 496" stroke-opacity="0.05"/>
+    </g>
+  </g>
+  <rect x="17.5" y="17.5" width="477" height="477" rx="114.5" fill="none" stroke="url(#rim)" stroke-width="3"/>
+
+  <!-- Glyph -->
+  <g transform="translate(256 256) scale(1.2) skewX(-10) translate(-264 -256)">
+    <g filter="url(#shadow)">
+      <use href="#ribbon" fill="url(#ribbonFill)" stroke="url(#ribbonFill)" stroke-width="24" stroke-linejoin="round"/>
+      <use href="#link" fill="url(#linkFill)"/>
+    </g>
+
+    <!-- Glass: sheen, facets and an edge highlight on each shape -->
+    <g mask="url(#ribbonMask)">
+      <rect x="130" y="100" width="180" height="300" fill="url(#sheen)"/>
+      <path d="M130 286 L310 170 L310 196 L130 316 Z" fill="#ffffff" opacity="0.14"/>
+      <path d="M130 344 L310 248 L310 260 L130 358 Z" fill="#ffffff" opacity="0.09"/>
+    </g>
+    <rect x="130" y="110" width="180" height="290" fill="url(#edge)" mask="url(#ribbonRim)" opacity="0.75"/>
+    <g mask="url(#linkMask)">
+      <rect x="296" y="292" width="136" height="92" fill="url(#sheen)"/>
+      <path d="M292 370 L434 300 L434 314 L292 384 Z" fill="#ffffff" opacity="0.16"/>
+      <use href="#link" fill="none" stroke="url(#edge)" stroke-width="4.5" opacity="0.75"/>
+    </g>
+  </g>
+</svg>

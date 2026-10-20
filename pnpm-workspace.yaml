@@ -1,0 +1,8 @@
+# Electron Forge needs a flat node_modules (like npm's) to package the app.
+nodeLinker: hoisted
+
+allowBuilds:
+  # Downloads the Electron binary for development and packaging.
+  electron: true
+  # Native resolver used only by the old eslint-config-next; its prebuilt binary is enough.
+  unrs-resolver: false

@@ -1,0 +1,110 @@
+/* Menus and popovers render in a portal, so the layer class repeats the palette for them. */
+.obsidian-dashboard-shell,
+.obsidian-dashboard-shell-layer {
+  --obsidian-dashboard-shell-background: #ffffff;
+  --obsidian-dashboard-shell-sidebar: var(--obsidian-dashboard-shell-background);
+  --obsidian-dashboard-shell-panel: var(--obsidian-dashboard-shell-background);
+  --obsidian-dashboard-shell-control: #ffffff;
+  --obsidian-dashboard-shell-muted: #efefef;
+  --obsidian-dashboard-shell-muted-hover: #e6e6e6;
+  --obsidian-dashboard-shell-border: #e7e7e7;
+  --obsidian-dashboard-shell-border-strong: #d6d6d6;
+  --obsidian-dashboard-shell-foreground: #161616;
+  --obsidian-dashboard-shell-text-muted: #5c5c5c;
+  --obsidian-dashboard-shell-text-subtle: #737373;
+  /* Duotone icons draw their second layer at 30% of this color, so one dark value gives black and grey. */
+  --obsidian-dashboard-shell-icon: #161616;
+  --obsidian-dashboard-shell-hover: rgb(0 0 0 / 0.045);
+  --obsidian-dashboard-shell-accent: #2563eb;
+  --obsidian-dashboard-shell-accent-hover: #3b82f6;
+  --obsidian-dashboard-shell-accent-foreground: #f9fbff;
+  --obsidian-dashboard-shell-success: #16a34a;
+  --obsidian-dashboard-shell-warning: #d97706;
+  --obsidian-dashboard-shell-danger: #e5484d;
+  /* Filled red buttons keep white text readable in both themes. */
+  --obsidian-dashboard-shell-danger-solid: #dc2626;
+  --obsidian-dashboard-shell-danger-solid-hover: #c81e1e;
+  --obsidian-dashboard-shell-ring: #8b8b8b;
+  --obsidian-dashboard-shell-control-shadow: 0 0 0 1px rgb(0 0 0 / 0.08), 0 1px 2px rgb(0 0 0 / 0.06);
+  --obsidian-dashboard-shell-accent-shadow: 0 2px 4px rgb(37 99 235 / 0.24), 0 0 0 1px #1d4ed8, inset 0 4px 6px rgb(255 255 255 / 0.2),
+    inset 0 0 0 1px rgb(255 255 255 / 0.15), inset 0 -8px 14px rgb(0 0 0 / 0.15);
+  /* Translucent so the backdrop blur shows through. */
+  --obsidian-dashboard-shell-menu: rgb(255 255 255 / 0.82);
+  --obsidian-dashboard-shell-menu-highlight: rgb(0 0 0 / 0.06);
+  --obsidian-dashboard-shell-menu-shadow: 0 0 0 1px rgb(0 0 0 / 0.08), 0 2px 4px rgb(0 0 0 / 0.04), 0 12px 32px -6px rgb(0 0 0 / 0.16);
+}
+
+.dark .obsidian-dashboard-shell,
+.dark .obsidian-dashboard-shell-layer,
+.obsidian-dashboard-shell.dark,
+.obsidian-dashboard-shell-layer.dark {
+  --obsidian-dashboard-shell-background: #161616;
+  --obsidian-dashboard-shell-sidebar: var(--obsidian-dashboard-shell-background);
+  --obsidian-dashboard-shell-panel: var(--obsidian-dashboard-shell-background);
+  --obsidian-dashboard-shell-control: #1e1e1e;
+  --obsidian-dashboard-shell-muted: #2a2a2a;
+  --obsidian-dashboard-shell-muted-hover: #333333;
+  --obsidian-dashboard-shell-border: #232323;
+  --obsidian-dashboard-shell-border-strong: #393939;
+  --obsidian-dashboard-shell-foreground: #f9fbff;
+  --obsidian-dashboard-shell-text-muted: #9a9a9a;
+  --obsidian-dashboard-shell-text-subtle: #808080;
+  --obsidian-dashboard-shell-icon: #f9fbff;
+  --obsidian-dashboard-shell-hover: rgb(255 255 255 / 0.045);
+  --obsidian-dashboard-shell-success: #22c55e;
+  --obsidian-dashboard-shell-warning: #fbbf24;
+  --obsidian-dashboard-shell-danger: #f97373;
+  --obsidian-dashboard-shell-ring: #676767;
+  --obsidian-dashboard-shell-control-shadow: 0 0 0 1px rgb(0 0 0 / 0.4), inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 0 0 1px rgb(255 255 255 / 0.06);
+  --obsidian-dashboard-shell-accent-shadow: 0 4px 4px rgb(42 42 42 / 0.32), 0 0 0 1px #0e0e0e, inset 0 4px 6px rgb(255 255 255 / 0.2),
+    inset 0 0 0 1px rgb(255 255 255 / 0.15), inset 0 -8px 14px rgb(0 0 0 / 0.15);
+  --obsidian-dashboard-shell-menu: rgb(30 30 30 / 0.78);
+  --obsidian-dashboard-shell-menu-highlight: rgb(255 255 255 / 0.07);
+  --obsidian-dashboard-shell-menu-shadow: 0 0 0 1px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 0 0 1px rgb(255 255 255 / 0.06),
+    0 16px 36px -8px rgb(0 0 0 / 0.6);
+}
+
+/* A thin thumb that only appears while the pointer or focus is in the scroll area, with no track or arrow buttons. */
+@supports not selector(::-webkit-scrollbar) {
+  .obsidian-dashboard-shell-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+
+  .obsidian-dashboard-shell-scroll:is(:hover, :focus-within) {
+    scrollbar-color: var(--obsidian-dashboard-shell-border-strong) transparent;
+  }
+}
+
+/* Chromium ignores the scrollbar pseudo-elements once scrollbar-width or scrollbar-color is set, so they stay unset here. */
+@supports selector(::-webkit-scrollbar) {
+  .obsidian-dashboard-shell-scroll::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .obsidian-dashboard-shell-scroll::-webkit-scrollbar-track,
+  .obsidian-dashboard-shell-scroll::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  .obsidian-dashboard-shell-scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: transparent;
+  }
+
+  .obsidian-dashboard-shell-scroll:is(:hover, :focus-within)::-webkit-scrollbar-thumb {
+    background: var(--obsidian-dashboard-shell-border-strong);
+  }
+
+  .obsidian-dashboard-shell-scroll::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
+.obsidian-dashboard-shell[data-resizing] {
+  cursor: col-resize;
+  user-select: none;
+}

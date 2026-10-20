@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" class="h-full antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>LinkBook</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <style>
+      /* Shown until the library has loaded, in the window's own colors, so there's never a white flash. */
+      html, body { margin: 0; height: 100%; background: #ffffff; color: #161616; }
+      @media (prefers-color-scheme: dark) { html, body { background: #161616; color: #f9fbff; } }
+      .boot { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; font: 13px/1.4 Arial, Helvetica, sans-serif; }
+      .boot img { width: 56px; height: 56px; }
+      .boot p { margin: 0; opacity: 0.6; }
+    </style>
+  </head>
+  <body class="min-h-full flex flex-col">
+    <div id="root" class="h-full">
+      <div class="boot" role="status">
+        <img src="/logo.svg" alt="" />
+        <p>Loading your bookmarks…</p>
+      </div>
+    </div>
+    <script type="module" src="/src/renderer/main.tsx"></script>
+  </body>
+</html>
