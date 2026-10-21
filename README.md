@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/social-preview.png" width="100px" alt="LinkBook logo" />
+  <img src="./assets/social-preview.png" alt="LinkBook logo" />
   <h1>LinkBook</h1>
   <h3>A free and open-source alternative to Linkwarden for Linux</h3>
 
