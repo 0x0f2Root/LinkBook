@@ -20,7 +20,8 @@
     "lint": "eslint src tests forge.config.ts vite.main.config.ts vite.preload.config.ts vite.renderer.config.ts vitest.config.mts vitest.e2e.config.mts",
     "test": "vitest run",
     "test:e2e": "vitest run --config vitest.e2e.config.mts",
-    "check": "pnpm typecheck && pnpm lint && pnpm test"
+    "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "demo:record": "node scripts/record-demo.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

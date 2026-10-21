@@ -124,14 +124,3 @@ export function toNetscapeBookmarks(library: Library) {
   lines.push("</DL><p>", "");
   return lines.join("\n");
 }
-
-/** Collections that ship with Linkbook and are added once to every library. */
-export const BUNDLED_COLLECTIONS = [
-  {
-    id: "awesome-cybersecurity-bookmarks",
-    name: "Awesome Cybersecurity Bookmarks",
-    source: "https://github.com/hRun/awesome-cybersecurity-bookmarks",
-    // Loaded on demand, so the list doesn't weigh down the page script.
-    load: () => import("@/data/awesome-cybersecurity-bookmarks.json").then((module) => module.default as ImportedBookmark[]),
-  },
-];

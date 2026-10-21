@@ -51,7 +51,7 @@ vite.*.config.ts      main, preload, renderer builds
 | 6 | Add / delete category | unchanged | not run in Electron (component unchanged) |
 | 7 | Import Netscape bookmarks HTML | Import button and Ctrl+O use the native file dialog (main reads the file, 32 MB cap); dropping a file on the window also imports | e2e: drop import (+2 bookmarks); unit: parser, merge, skip bookmarklets |
 | 8 | **New:** export bookmarks | Export button and Ctrl+Shift+E write a Netscape HTML file through the native save dialog | unit: export → import round trip. The native dialog itself wasn't automated. |
-| 9 | Bundled cybersecurity collection added once | unchanged | e2e: first run shows 228 bookmarks |
+| 9 | Bundled cybersecurity collection | removed after the migration, by request: a first run starts with **0 bookmarks** and one empty Unsorted category, and the empty board offers only New bookmark and Import bookmarks. The collection data is no longer shipped; the sample bookmarks live in `tests/fixtures`. | e2e: first run has 0 bookmarks, the empty board shows exactly those two buttons, and nothing gets added on its own |
 | 10 | Preview images, backfill, broken images | `lbimg://` cache; failures remembered by the main process instead of the renderer | manual online run: 44 images cached (500 KB), 0 log errors; unit: request parsing |
 | 11 | GitHub repo stats | IPC service (port of `/api/github`) | manual online run: 16 repos got stats; unit: repo detection, staleness |
 | 12 | Light / dark theme, following the system | `settings.json` + `nativeTheme`; View menu checkbox | e2e: theme persists across restart |
@@ -96,6 +96,7 @@ Build prerequisites: Node.js ≥ 22.13, pnpm ≥ 10, `dpkg`, `dpkg-deb`, `fakero
 | `pnpm typecheck` | pass, 0 errors |
 | `pnpm lint` | pass, 0 errors, 6 warnings (all `@next/next/no-img-element`, see limitations) |
 | `pnpm test` (unit) | 5 files, **86/86 passed** |
+| `pnpm test:e2e` after the empty-start change | **11/11 passed** (empty first run, clean empty board, plus the earlier checks) |
 | `pnpm test:e2e` against `out/LinkBook-linux-x64/linkbook` | **9/9 passed** |
 | `pnpm test:e2e` against the `.deb`'s files, unpacked with `dpkg-deb -x` and launched through its `usr/bin/linkbook` symlink | **9/9 passed** |
 | Packaged app online, fresh profile, 20 s | renders; 44 images cached through `lbimg://`; 0 direct page requests to other sites; 16 GitHub stats; 0 errors in `main.log` |

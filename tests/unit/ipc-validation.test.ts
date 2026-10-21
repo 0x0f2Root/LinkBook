@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SAMPLE_LIBRARY } from "@/lib/bookmarks";
+import { SAMPLE_LIBRARY } from "../fixtures/sample-library";
 import { GITHUB_REPO, isHttpUrl, isLibrary, isSettingsPatch } from "@/shared/ipc";
 
 describe("isHttpUrl", () => {

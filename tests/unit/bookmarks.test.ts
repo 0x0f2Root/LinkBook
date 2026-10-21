@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { hostname, imageSrc, moveBookmark, parseTags, SAMPLE_LIBRARY, uniqueId } from "@/lib/bookmarks";
+import { hostname, imageSrc, moveBookmark, parseTags, uniqueId } from "@/lib/bookmarks";
+import { SAMPLE_LIBRARY } from "../fixtures/sample-library";
 import { githubRepo, isStale } from "@/lib/github";
 
 vi.mock("electron", () => ({ nativeImage: {} }));

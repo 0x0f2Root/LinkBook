@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from "vitest";
-import { SAMPLE_LIBRARY, type Library } from "@/lib/bookmarks";
+import type { Library } from "@/lib/bookmarks";
+import { SAMPLE_LIBRARY } from "../fixtures/sample-library";
 import { mergeImport, parseNetscapeBookmarks, toNetscapeBookmarks } from "@/lib/import";
 
 const EXPORT = `<!DOCTYPE NETSCAPE-Bookmark-file-1>

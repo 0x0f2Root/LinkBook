@@ -31,7 +31,7 @@ import {
   type ViewHandlers,
 } from "@/components/linkbook/bookmark-views";
 import { fetchGithubStats, githubRepo, isStale } from "@/lib/github";
-import { BUNDLED_COLLECTIONS, mergeImport, parseNetscapeBookmarks, toNetscapeBookmarks } from "@/lib/import";
+import { mergeImport, parseNetscapeBookmarks, toNetscapeBookmarks } from "@/lib/import";
 import { LIMITS, type LibraryRecovery } from "@/shared/ipc";
 import {
   CATEGORY_COLORS,
@@ -127,27 +127,6 @@ export function LinkbookBoard({ recovery = null }: { recovery?: LibraryRecovery 
   useEffect(() => onSaveError((message) => setToast({ id: Date.now(), message })), []);
 
   const { categories, bookmarks } = library;
-
-  // Bundled collections are added once. The check runs on the stored library, not this render's copy.
-  const collectionsLoading = useRef(new Set<string>());
-  useEffect(() => {
-    // Waits for the stored library, so a collection already added isn't downloaded again.
-    if (!hydrated) return;
-    for (const collection of BUNDLED_COLLECTIONS) {
-      if (library.imports?.includes(collection.id) || collectionsLoading.current.has(collection.id)) continue;
-      collectionsLoading.current.add(collection.id);
-      collection.load().then((items) => {
-        let added = 0;
-        setLibrary((current) => {
-          if (current.imports?.includes(collection.id)) return current;
-          const result = mergeImport(current, items);
-          added = result.added;
-          return { ...result.library, imports: [...(current.imports ?? []), collection.id] };
-        });
-        if (added > 0) notify(`Added ${added} bookmarks from ${collection.name}`);
-      });
-    }
-  }, [hydrated, library.imports]);
 
   const importHtml = (html: string) => {
     let imported;
@@ -471,6 +450,13 @@ export function LinkbookBoard({ recovery = null }: { recovery?: LibraryRecovery 
         }
       >
         <div className="flex min-h-full flex-col">
+          {hydrated && bookmarks.length === 0 && (
+            <StartPanel
+              canAdd={categories.length > 0}
+              onNewBookmark={() => newBookmarkButton.current?.click()}
+              onImport={() => void importFromDialog()}
+            />
+          )}
           {display === "board" || !hydrated ? (
             <div
               className="grid grid-cols-[repeat(auto-fill,minmax(288px,1fr))] items-start gap-3 p-3"
@@ -508,7 +494,7 @@ export function LinkbookBoard({ recovery = null }: { recovery?: LibraryRecovery 
               ))}
               {hydrated && !viewCategoryId && <AddCategoryColumn onAdd={addCategory} />}
             </div>
-          ) : shown.length === 0 ? (
+          ) : bookmarks.length === 0 ? null : shown.length === 0 ? (
             <EmptyView
               title={isFiltered ? "No bookmarks match" : "No bookmarks here yet"}
               detail={isFiltered ? "Try another tab, tag, or search." : "Add one with New bookmark, or import a bookmarks file."}
@@ -714,6 +700,36 @@ function BoardSkeleton() {
       ))}
       <span className="sr-only">Loading bookmarks</span>
     </>
+  );
+}
+
+/** Shown while the library has no bookmarks: the ways to get the first ones in. */
+function StartPanel({ canAdd, onNewBookmark, onImport }: { canAdd: boolean; onNewBookmark: () => void; onImport: () => void }) {
+  return (
+    <section aria-labelledby="start-panel-title" className="mx-3 mt-3 flex flex-col items-center gap-4 rounded-xl border border-dashed border-(--obsidian-dashboard-shell-border-strong) px-6 py-10 text-center">
+      <img src="/logo.svg" alt="" width={48} height={48} className="size-12" />
+      <div className="flex max-w-md flex-col gap-1.5">
+        <h2 id="start-panel-title" className="text-sm font-medium">
+          Your board is empty
+        </h2>
+        <p className="text-xs leading-relaxed text-(--obsidian-dashboard-shell-text-subtle)">
+          Save your first link, or bring in the bookmarks from your browser. You can also drop a bookmarks .html file anywhere on this
+          window.
+        </p>
+      </div>
+      <div className="flex flex-wrap justify-center gap-2">
+        {canAdd && (
+          <DashboardButton variant="primary" size="sm" onClick={onNewBookmark}>
+            <AddCircle aria-hidden />
+            New bookmark
+          </DashboardButton>
+        )}
+        <DashboardButton variant="secondary" size="sm" onClick={onImport}>
+          <Upload aria-hidden />
+          Import bookmarks
+        </DashboardButton>
+      </div>
+    </section>
   );
 }
 

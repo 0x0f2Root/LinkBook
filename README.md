@@ -16,7 +16,7 @@
 
 [Features](#features) · [Install](#install) · [Import your bookmarks](#import-your-bookmarks) · [Shortcuts](#keyboard-shortcuts) · [Development](#development)
 
-<img src="./assets/screenshots/board-dark.png" alt="LinkBook's board view in dark mode, with bookmarks grouped into category columns" />
+<img src="./assets/screenshots/board-dark.png" alt="LinkBook's board view in dark mode, with Next.js and Programming bookmarks in category columns" />
 
 </div>
 
@@ -49,15 +49,23 @@ Bookmarks live in categories and tags, and every link gets its title, descriptio
 - ⌨️ Native menus and keyboard shortcuts for everything you do often
 - 🛡️ No account, no server, and no telemetry. The app talks to the internet only to fetch link previews, images, and GitHub stats, and can be run fully offline.
 - 🔐 Hardened Electron app: sandboxed window, strict Content Security Policy, and a private-network guard on every fetch
-- 📚 Starts with a ready-made collection of 217 [cybersecurity bookmarks](https://github.com/hRun/awesome-cybersecurity-bookmarks), so the board isn't empty on day one
+- 📭 Starts with a clean, empty board: no sample data and nothing added on its own
 - 🐧 Built for Linux, packaged as a `.deb` with a desktop menu entry and a `linkbook` command
+
+## See it in action
+
+<div align="center">
+  <img src="./assets/demo/linkbook-demo.gif" alt="Demo: starting from an empty board, importing a browser bookmarks export, pasting a GitHub link that fills in its own preview, dragging a card between columns, switching between board, grid, table, and list, searching, filtering by tag, pinning, and switching to dark mode" />
+</div>
+
+The demo is recorded from the real app by `pnpm demo:record`, so it can be re-recorded after any change.
 
 ## Screenshots
 
 <div align="center">
-  <img src="./assets/screenshots/board-light.png" width="49%" alt="Board view in light mode" />
+  <img src="./assets/screenshots/grid-light.png" width="49%" alt="Grid view in light mode, with preview images for each bookmark" />
   <img src="./assets/screenshots/grid-dark.png" width="49%" alt="Grid view in dark mode" />
-  <img src="./assets/screenshots/table-dark.png" width="98%" alt="Table view in dark mode, with thumbnails, categories, tags, and GitHub stats" />
+  <img src="./assets/screenshots/list-dark.png" width="98%" alt="List view in dark mode, with bookmarks grouped by category and their descriptions on one line" />
 </div>
 
 ## LinkBook and Linkwarden
@@ -165,6 +173,7 @@ pnpm package          # packaged app in out/LinkBook-linux-x64/
 pnpm make:deb         # the installer in out/make/deb/x64/
 pnpm check            # typecheck, lint, and unit tests
 pnpm test:e2e         # end-to-end tests against the packaged app (run pnpm package first)
+pnpm demo:record      # re-record the demo GIF in assets/demo/ (run pnpm package first)
 ```
 
 `pnpm test:e2e` opens and closes LinkBook windows for about ten seconds, using a throwaway profile with the network off. Set `LINKBOOK_BINARY=/usr/bin/linkbook` to test an installed copy.
@@ -197,6 +206,5 @@ LinkBook stands on the work of others:
 
 - [Linkwarden](https://github.com/linkwarden/linkwarden), the inspiration for the whole idea
 - [ObsidianUI](https://www.obsidianui.dev), for the dashboard shell the interface is built on
-- [hRun/awesome-cybersecurity-bookmarks](https://github.com/hRun/awesome-cybersecurity-bookmarks), for the bundled collection
 - [Electron](https://www.electronjs.org), [Electron Forge](https://www.electronforge.io), [Vite](https://vite.dev), [React](https://react.dev), [Tailwind CSS](https://tailwindcss.com), [Radix](https://www.radix-ui.com), [Motion](https://motion.dev), [Lucide](https://lucide.dev), and Duo Icons
-- [Unsplash](https://unsplash.com), for the photos on the sample bookmarks
+- [Unsplash](https://unsplash.com), for the photos on the sample bookmarks in the screenshots and tests

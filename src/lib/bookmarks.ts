@@ -77,136 +77,16 @@ export type Library = {
   categories: Category[];
   /** Array order is the manual order inside each column. */
   bookmarks: Bookmark[];
-  /** Bundled collections already added, so one you delete from isn't added back. */
+  /** Collections added by earlier versions of LinkBook. Kept so libraries saved by them still load. */
   imports?: string[];
 };
 
 export const CATEGORY_COLORS = ["#60a5fa", "#f472b6", "#facc15", "#34d399", "#a78bfa", "#fb923c", "#2dd4bf", "#f87171"];
 
-const unsplash = (id: string) => `https://images.unsplash.com/photo-${id}?w=640&q=70&auto=format&fit=crop`;
-
-export const SAMPLE_LIBRARY: Library = {
-  categories: [
-    { id: "development", name: "Development", color: "#60a5fa" },
-    { id: "design", name: "Design", color: "#f472b6" },
-    { id: "reading", name: "Reading", color: "#facc15" },
-    { id: "tools", name: "Tools", color: "#34d399" },
-  ],
-  bookmarks: [
-    {
-      id: "nextjs-docs",
-      url: "https://nextjs.org/docs",
-      title: "Next.js Docs",
-      description: "App Router, caching, and data fetching reference.",
-      image: unsplash("1555066931-4365d14bab8c"),
-      categoryId: "development",
-      tags: ["react", "nextjs", "docs"],
-      pinned: true,
-      createdAt: "2026-10-17T09:12:00Z",
-    },
-    {
-      id: "mdn",
-      url: "https://developer.mozilla.org/en-US/docs/Web",
-      title: "MDN Web Docs",
-      description: "The reference for HTML, CSS, and JavaScript APIs.",
-      image: unsplash("1461749280684-dccba630e2f6"),
-      categoryId: "development",
-      tags: ["docs", "css", "javascript"],
-      createdAt: "2026-10-12T15:40:00Z",
-    },
-    {
-      id: "linkwarden",
-      url: "https://github.com/linkwarden/linkwarden",
-      title: "Linkwarden",
-      description: "Self-hosted collaborative bookmark manager. The inspiration for this app.",
-      image: unsplash("1517694712202-14dd9538aa97"),
-      categoryId: "development",
-      tags: ["self-hosted", "open-source"],
-      unread: true,
-      createdAt: "2026-10-18T20:05:00Z",
-    },
-    {
-      id: "tailwind",
-      url: "https://tailwindcss.com/docs",
-      title: "Tailwind CSS",
-      description: "Utility classes, theme variables, and v4 configuration.",
-      categoryId: "development",
-      tags: ["css", "docs"],
-      createdAt: "2026-10-03T11:00:00Z",
-    },
-    {
-      id: "obsidianui",
-      url: "https://www.obsidianui.dev/docs/dashboard-shell",
-      title: "ObsidianUI Dashboard Shell",
-      description: "The layout this board is built on.",
-      image: unsplash("1498050108023-c5249f4df085"),
-      categoryId: "design",
-      tags: ["ui", "react"],
-      pinned: true,
-      createdAt: "2026-10-19T08:30:00Z",
-    },
-    {
-      id: "refactoring-ui",
-      url: "https://www.refactoringui.com",
-      title: "Refactoring UI",
-      description: "Practical design tactics for developers.",
-      image: unsplash("1558494949-ef010cbdcc31"),
-      categoryId: "design",
-      tags: ["ui", "book"],
-      createdAt: "2026-09-28T18:22:00Z",
-    },
-    {
-      id: "google-fonts",
-      url: "https://fonts.google.com",
-      title: "Google Fonts",
-      description: "Free, open-source typefaces.",
-      categoryId: "design",
-      tags: ["typography"],
-      unread: true,
-      createdAt: "2026-10-09T10:10:00Z",
-    },
-    {
-      id: "great-work",
-      url: "https://paulgraham.com/greatwork.html",
-      title: "How to Do Great Work",
-      description: "Paul Graham on curiosity, taste, and picking problems.",
-      image: unsplash("1481627834876-b7833e8f5570"),
-      categoryId: "reading",
-      tags: ["essay", "career"],
-      unread: true,
-      createdAt: "2026-10-15T21:45:00Z",
-    },
-    {
-      id: "overreacted",
-      url: "https://overreacted.io",
-      title: "overreacted",
-      description: "Dan Abramov's writing on React and programming.",
-      image: unsplash("1512820790803-83ca734da794"),
-      categoryId: "reading",
-      tags: ["react", "essay"],
-      createdAt: "2026-10-01T07:30:00Z",
-    },
-    {
-      id: "excalidraw",
-      url: "https://excalidraw.com",
-      title: "Excalidraw",
-      description: "Hand-drawn style whiteboard for quick diagrams.",
-      image: unsplash("1504384308090-c894fdcc538d"),
-      categoryId: "tools",
-      tags: ["diagrams", "open-source"],
-      createdAt: "2026-10-11T13:00:00Z",
-    },
-    {
-      id: "raycast",
-      url: "https://www.raycast.com",
-      title: "Raycast",
-      description: "Launcher with extensions, snippets, and window management.",
-      image: unsplash("1550745165-9bc0b252726f"),
-      categoryId: "tools",
-      tags: ["productivity"],
-      createdAt: "2026-10-06T16:20:00Z",
-    },
-  ],
+/** What a first run starts with: no bookmarks, and one category so New bookmark has somewhere to put them. */
+export const EMPTY_LIBRARY: Library = {
+  categories: [{ id: "unsorted", name: "Unsorted", color: CATEGORY_COLORS[0] }],
+  bookmarks: [],
 };
 
 export function hostname(url: string) {
@@ -252,12 +132,12 @@ export function uniqueId(base: string, taken: { id: string }[]) {
 // copy in memory, so reads stay synchronous, and sends every change back to be written atomically.
 const listeners = new Set<() => void>();
 const saveErrorListeners = new Set<(message: string) => void>();
-let cached: Library = SAMPLE_LIBRARY;
+let cached: Library = EMPTY_LIBRARY;
 let offline = false;
 
-/** Called once at startup with what the main process loaded. Null means a first run. */
+/** Called once at startup with what the main process loaded. Null means a first run, which starts empty. */
 export function initLibrary(library: Library | null, { offline: isOffline = false } = {}) {
-  cached = library ?? SAMPLE_LIBRARY;
+  cached = library ?? EMPTY_LIBRARY;
   offline = isOffline;
 }
 
