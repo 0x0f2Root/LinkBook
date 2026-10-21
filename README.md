@@ -55,7 +55,30 @@ LinkBook brings that experience to the desktop. Bookmarks live in categories and
 
 ## Install
 
+Download the latest build from the [Releases page](https://github.com/0x0f2Root/LinkBook/releases). All packages are for x86-64 Linux:
 
+| Package | For | Install |
+|---|---|---|
+| `.deb` | Debian, Ubuntu, Mint, Pop!_OS, and derivatives | `sudo apt install ./linkbook_*_amd64.deb` |
+| `.AppImage` | Almost any distribution, no install | `chmod +x LinkBook-*.AppImage && ./LinkBook-*.AppImage` |
+| `.zip` | A portable folder | unzip, then run `./LinkBook-linux-x64/linkbook` |
+
+The `.deb` adds LinkBook to your applications menu under **Utility** and a `linkbook` command. Opening it again while it's running brings the existing window forward. Each release includes a `SHA256SUMS` file to check your download with `sha256sum -c SHA256SUMS --ignore-missing`.
+
+To remove the `.deb`:
+
+```bash
+sudo apt remove linkbook
+```
+
+Removing the package keeps your bookmarks in `~/.config/LinkBook`. Delete that folder to remove them too.
+
+### Build from source
+
+```bash
+pnpm install
+pnpm make          # .deb, AppImage, and .zip in out/make/
+```
 
 ## Import your bookmarks
 

@@ -1,10 +1,27 @@
 import { MakerDeb } from "@electron-forge/maker-deb";
+import { MakerRpm } from "@electron-forge/maker-rpm";
+import { MakerZIP } from "@electron-forge/maker-zip";
 import { FusesPlugin } from "@electron-forge/plugin-fuses";
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import { chmod, lstat, readdir } from "node:fs/promises";
 import path from "node:path";
 import type { ForgeConfig } from "@electron-forge/shared-types";
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
+import { MakerAppImage } from "@reforged/maker-appimage";
+
+// Shared by every Linux package, so they all describe the app the same way.
+const app = {
+  name: "linkbook",
+  productName: "LinkBook",
+  genericName: "Bookmark Manager",
+  description: "Save, organize, and browse bookmarks on a board, grid, table, or list.",
+  productDescription:
+    "LinkBook is a free and open-source desktop bookmark manager for Linux, inspired by Linkwarden. Bookmarks are grouped into categories and tags, show preview images and GitHub stats, and can be imported from any browser's bookmarks export.",
+  // One main category, so menus list LinkBook once.
+  categories: ["Utility" as const],
+  homepage: "https://github.com/0x0f2Root/LinkBook",
+  icon: "assets/icons/512x512.png",
+};
 
 /** Clears group and world write bits, so nothing in /usr/lib/linkbook is writable by anyone but root. */
 async function removeGroupWrite(target: string): Promise<void> {
@@ -34,22 +51,32 @@ const config: ForgeConfig = {
   makers: [
     new MakerDeb({
       options: {
-        name: "linkbook",
-        productName: "LinkBook",
-        genericName: "Bookmark Manager",
-        description: "Save, organize, and browse bookmarks on a board, grid, table, or list.",
-        productDescription:
-          "LinkBook is a desktop bookmark manager inspired by Linkwarden. Bookmarks are grouped into categories and tags, show preview images and GitHub stats, and can be imported from any browser's bookmarks export.",
-        // One main category, so menus list LinkBook once.
-        categories: ["Utility"],
+        ...app,
         section: "web",
         priority: "optional",
-        homepage: "https://github.com/linkwarden/linkwarden",
         maintainer: "LinkBook <SYZADMIN666@proton.me>",
-        // Installed as /usr/share/pixmaps/linkbook.png, which the generated .desktop entry points to.
-        icon: "assets/icons/512x512.png",
       },
     }),
+    new MakerRpm({
+      options: {
+        ...app,
+        license: "MIT",
+      },
+    }),
+    new MakerAppImage({
+      options: {
+        name: app.name,
+        bin: "linkbook",
+        productName: app.productName,
+        genericName: app.genericName,
+        categories: app.categories,
+        icon: app.icon,
+        // A fixed release of the official AppImage runtime, not the moving "continuous" build.
+        runtime: "https://github.com/AppImage/type2-runtime/releases/download/20251108/runtime-x86_64",
+      },
+    }),
+    // A portable folder for any distribution: unzip and run ./linkbook.
+    new MakerZIP({}, ["linux"]),
   ],
   plugins: [
     new VitePlugin({
