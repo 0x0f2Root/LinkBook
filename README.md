@@ -89,17 +89,6 @@ Folders become categories, tags and dates are kept, and links you already have a
 
 Starring the repository and telling a friend who's tired of browser bookmarks are the best ways to help.
 
-## Suggestions & roadmap
-
-Ideas and bug reports are welcome as issues in the repository. Things that would make LinkBook better, roughly in order:
-
-- Page archives (screenshot and PDF), like Linkwarden's, to protect against link rot
-- Bulk actions: select several bookmarks to move, tag, or delete
-- More package formats: AppImage, Flatpak, and `.rpm`
-- Optional sync between computers
-
-These are ideas, not promises.
-
 ## Development
 
 Requirements: Node.js 22.13 or newer, pnpm 10 or newer, and `dpkg`, `dpkg-deb`, and `fakeroot` for packaging.
