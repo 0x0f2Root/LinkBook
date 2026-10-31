@@ -62,7 +62,7 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "6.1.2",
     "babel-plugin-react-compiler": "^1.0.0",
-    "electron": "44.5.1",
+    "electron": "44.9.1",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "happy-dom": "21.0.4",
